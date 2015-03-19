@@ -1,6 +1,6 @@
 /**
  * angular-strap
- * @version v2.2.1 - 2015-03-10
+ * @version v2.2.1 - 2015-03-19
  * @link http://mgcrea.github.io/angular-strap
  * @author Olivier Louvignes (olivier@mg-crea.com)
  * @license MIT License, http://www.opensource.org/licenses/MIT
@@ -181,8 +181,10 @@ angular.module('mgcrea.ngStrap.select', ['mgcrea.ngStrap.tooltip', 'mgcrea.ngStr
           evt.stopPropagation();
           // Emulate click for mobile devices
           if(isTouch) {
-            var targetEl = angular.element(evt.target);
-            targetEl.triggerHandler('click');
+            var clickEvent = document.createEvent('MouseEvents');
+            var target = evt.target;
+      		clickEvent.initMouseEvent('click', true, true, window, 1, target.screenX, target.screenY, target.clientX, target.clientY, false, false, false, false, 0, null);
+      		target.dispatchEvent(clickEvent);
           }
         };
 
@@ -233,7 +235,7 @@ angular.module('mgcrea.ngStrap.select', ['mgcrea.ngStrap.tooltip', 'mgcrea.ngStr
         $select.hide = function() {
           if(!options.multiple && !controller.$modelValue) {
             scope.$activeIndex = -1;
-          } 
+          }
           $select.$element.off(isTouch ? 'touchstart' : 'mousedown', $select.$onMouseDown);
           if(options.keyboard) {
             element.off('keydown', $select.$onKeyDown);
